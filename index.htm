@@ -4,143 +4,51 @@
     <title>Zilker Nature Preserves</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="user-scalable=no, initial-scale=0.5, width=device-width, viewport-fit=cover" />
-    <link rel="preload" href="script.js?v=1572031168115" as="script"/>
-<link rel="preload" href="media/panorama_2A678049_2777_352F_41C1_49B3B5E4A8CA_0/3/0_0.jpg?v=1572031168115" as="image"/>
-<link rel="preload" href="media/panorama_2A678049_2777_352F_41C1_49B3B5E4A8CA_0/3/0_1.jpg?v=1572031168115" as="image"/>
-<link rel="preload" href="media/panorama_2A678049_2777_352F_41C1_49B3B5E4A8CA_0/3/0_2.jpg?v=1572031168115" as="image"/>
-<link rel="preload" href="media/panorama_2A678049_2777_352F_41C1_49B3B5E4A8CA_0/3/0_3.jpg?v=1572031168115" as="image"/>
-<link rel="preload" href="media/panorama_2A678049_2777_352F_41C1_49B3B5E4A8CA_0/3/0_4.jpg?v=1572031168115" as="image"/>
-<link rel="preload" href="media/panorama_2A678049_2777_352F_41C1_49B3B5E4A8CA_0/3/0_5.jpg?v=1572031168115" as="image"/>
-<link rel="preload" href="media/panorama_2A678049_2777_352F_41C1_49B3B5E4A8CA_0/3/0_6.jpg?v=1572031168115" as="image"/>
-<link rel="preload" href="media/panorama_2A678049_2777_352F_41C1_49B3B5E4A8CA_0/3/0_7.jpg?v=1572031168115" as="image"/>
-<link rel="preload" href="media/panorama_2A678049_2777_352F_41C1_49B3B5E4A8CA_0/3/0_8.jpg?v=1572031168115" as="image"/>
-<link rel="preload" href="media/panorama_2A678049_2777_352F_41C1_49B3B5E4A8CA_0/3/0_9.jpg?v=1572031168115" as="image"/>
-<link rel="preload" href="media/panorama_2A678049_2777_352F_41C1_49B3B5E4A8CA_0/3/0_10.jpg?v=1572031168115" as="image"/>
-<link rel="preload" href="media/panorama_2A678049_2777_352F_41C1_49B3B5E4A8CA_0/3/0_11.jpg?v=1572031168115" as="image"/>
-<meta name="description" content="VR Tour of the Zilker Nature Preserves in collaboration with the City of Austin Park Rangers"/>
-<meta name="theme-color" content="#FFFFFF"/>
-    <script src="lib/tdvplayer.js?v=1572031168115"></script>
+    <meta name="description" content="VR Tour of the Zilker Nature Preserves in collaboration with the City of Austin Park Rangers"/>
+	<meta name="theme-color" content="#FFFFFF"/>
+    <script src="lib/tdvplayer.js?v=1580511737465"></script>
+    <script src="script.js?v=1580511737465"></script>
     <script type="text/javascript">
-        var player;
-        var playersPlayingTmp = [];
-        var isInitialized = false;
-        var isPaused = false;
+        var tourScript;
 
         function loadTour()
         {
-            if(player)
+            if(tourScript)
                 return;
 
-            var beginFunc = function(event){
-                if(event.name == 'begin')
-                {
-                    var camera = event.data.source.get('camera');
-                    if(camera && camera.get('initialSequence') && camera.get('initialSequence').get('movements').length > 0)
-                        return;
-                }
-
-                if(event.sourceClassName == "MediaAudio")
-                    return;
-
-                isInitialized = true;
-
-                player.unbind('preloadMediaShow', beginFunc, player, true);
-                player.unbindOnObjectsOf('PanoramaPlayListItem', 'begin', beginFunc, player, true);
-                player.unbind('stateChange', beginFunc, player, true);
-                window.parent.postMessage("tourLoaded", '*');
-
-                disposePreloader();
-
-                onVirtualTourLoaded();
-            };
-
             var settings = new TDV.PlayerSettings();
-            
             settings.set(TDV.PlayerSettings.CONTAINER, document.getElementById('viewer'));
-            settings.set(TDV.PlayerSettings.SCRIPT_URL, 'script.js?v=1572031168115');
-            settings.set(TDV.PlayerSettings.WEBVR_POLYFILL_URL, 'lib/WebVRPolyfill.js?v=1572031168115');
-            settings.set(TDV.PlayerSettings.HLS_URL, 'lib/Hls.js?v=1572031168115');
-            settings.set(TDV.PlayerSettings.QUERY_STRING_PARAMETERS, 'v=1572031168115');
-            window.tdvplayer = player = TDV.PlayerAPI.create(settings);
-            player.bind('preloadMediaShow', beginFunc, player, true);
-            player.bind('stateChange', beginFunc, player, true);
-            player.bindOnObjectsOf('PanoramaPlayListItem', 'begin', beginFunc, player, true);
-            player.bindOnObject('rootPlayer', 'start', function(e){
-                var queryDict = {}; location.search.substr(1).split("&").forEach(function(item) {var k = item.split("=")[0], v = decodeURIComponent(item.split("=")[1]);queryDict[k] = v});
-                var item = undefined;
-                if("media-index" in queryDict){
-                    item = setMediaByIndex(parseInt(queryDict["media-index"]) - 1);
-                }
-                else if("media-name" in queryDict){
-                    item = setMediaByName(queryDict["media-name"]);
-                }
-                else{
-                    item = setMediaByIndex(0);
-                }
-                if(item != undefined && "trigger-overlay-name" in queryDict){
-                    triggerOverlayByName(item, queryDict["trigger-overlay-name"], "trigger-overlay-event" in queryDict ? queryDict["trigger-overlay-event"] : "click");
-                }
+            settings.set(TDV.PlayerSettings.WEBVR_POLYFILL_URL, 'lib/WebVRPolyfill.js?v=1580511737465');
+            settings.set(TDV.PlayerSettings.HLS_URL, 'lib/Hls.js?v=1580511737465');
+            settings.set(TDV.PlayerSettings.QUERY_STRING_PARAMETERS, 'v=1580511737465');
 
-                player.getById('rootPlayer').bind('tourEnded', function(){
-                    onVirtualTourEnded();
-                }, player, true);
-            }, player, false);
+            var devicesUrl = {"general":"script_general.js?v=1580511737465"};
 
-            /* Listen messages */
-            window.addEventListener('message', function (e) {
-                //Listen to messages for make actions to player in the format function:param1,param2
-                var action = e.data;
-                if (action == 'pauseTour' || action == 'resumeTour') {
-                    this[action].apply(this);
-                }
-            });
+            tourScript = new TourScript(settings, devicesUrl);
+            tourScript.bind(TourScript.EVENT_TOUR_LOADED, onVirtualTourLoaded);
+            tourScript.bind(TourScript.EVENT_TOUR_ENDED, onVirtualTourEnded);
+            tourScript.loadTour();
         }
 
         function pauseTour()
         {
-            isPaused = true;
-            if(!isInitialized)
+            if(!tourScript)
                 return;
 
-            var playLists = player.getByClassName('PlayList');
-            for(var i = 0, count = playLists.length; i<count; i++)
-            {
-                var playList = playLists[i];
-                var index = playList.get('selectedIndex');
-                if(index != -1)
-                {
-                    var item = playList.get('items')[index];
-                    var itemPlayer = item.get('player');
-                    if(itemPlayer && itemPlayer.pause)
-                    {
-                        playersPlayingTmp.push(itemPlayer);
-                        itemPlayer.pause();
-                    }
-                }
-            }
-
-            player.getById('pauseGlobalAudios')();
+            tourScript.pauseTour();
         }
 
         function resumeTour()
         {
-            isPaused = false;
-            if(!isInitialized)
+            if(!tourScript)
                 return;
 
-            while(playersPlayingTmp.length)
-            {
-                var viewer = playersPlayingTmp.pop();
-                viewer.play();
-            }
-
-            player.getById('resumeGlobalAudios')();
+            tourScript.resumeTour();
         }
 
         function onVirtualTourLoaded()
         {
-            if(isPaused)
-                pauseTour();
+            disposePreloader();
         }
 
         function onVirtualTourEnded()
@@ -148,38 +56,20 @@
 
         }
 
-        function getRootPlayer()
-        {
-            return window.tdvplayer !== undefined ? window.tdvplayer.getById('rootPlayer') : undefined;
-        }
-
         function setMediaByIndex(index)
         {
-            var rootPlayer = getRootPlayer();
-            if(rootPlayer !== undefined) {
-                return rootPlayer.setMainMediaByIndex(index);
-            }
+            if(!tourScript)
+                return;
+
+            tourScript.setMediaByIndex(index);
         }
 
         function setMediaByName(name)
         {
-            var rootPlayer = getRootPlayer();
-            if(rootPlayer !== undefined) {
-                return rootPlayer.setMainMediaByName(name);
-            }
-        }
+            if(!tourScript)
+                return;
 
-        function triggerOverlayByName(item, name, eventName)
-        {
-            var rootPlayer = getRootPlayer();
-            if(rootPlayer !== undefined) {
-                item.bind('begin', function(e){
-                    item.unbind('begin', arguments.callee, this);
-                    var overlay = rootPlayer.getPanoramaOverlayByName(item.get('media'), name);
-                    if(overlay)
-                        rootPlayer.triggerOverlay(overlay, eventName);
-                }, rootPlayer);
-            }
+            tourScript.setMediaByName(name);
         }
 
         function showPreloader()
@@ -286,7 +176,7 @@
             }
 
             showPreloader();
-loadTour()
+			loadTour();
         }
 
         function playVideo(video) {
@@ -335,6 +225,8 @@ loadTour()
         function isOVRWeb(){
             return window.location.hash.substring(1).split('&').indexOf('ovrweb') > -1;
         }
+
+        document.addEventListener('DOMContentLoaded', onLoad);
     </script>
     <style type="text/css">
         html, body { width: 100%; height: 100%; margin: 0; padding: 0; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
@@ -342,9 +234,9 @@ loadTour()
         #viewer { background-color: #FFFFFF; z-index:1; position:absolute; width: 100%; height: 100%; top: 0; }
         #preloadContainer { z-index:2; position:relative; width:100%; height:100%; transition: opacity 0.5s; -webkit-transition: opacity 0.5s; -moz-transition: opacity 0.5s; -o-transition: opacity 0.5s;}
     </style>
-    
+    ver
 </head>
-<body onload="onLoad()">
+<body>
     <div id="preloadContainer" style="background-color:rgba(255,255,255,1)"><div style="z-index: 4; position: absolute; left: 0%; top: 50%; width: 100.00%; height: 10.00%"><div style="text-align:left; color:#000; "><DIV STYLE="text-align:center;"><SPAN STYLE="letter-spacing:0vmin;color:#777777;font-family:Arial, Helvetica, sans-serif;"><SPAN STYLE="color:#666666;font-size:1.71vmin;">Welcome to the City of Austin's 360 VR experience! Loading, please wait...</SPAN></SPAN></DIV><DIV STYLE="text-align:center;"><SPAN STYLE="letter-spacing:0vmin;color:#777777;font-family:Arial, Helvetica, sans-serif;"><SPAN STYLE="color:#666666;font-size:1.71vmin;">www.austintexas.gov</SPAN></SPAN></DIV><p STYLE="margin:0; line-height:1.71vmin;"><BR STYLE="letter-spacing:0vmin;color:#000000;font-size:1vmin;font-family:Arial, Helvetica, sans-serif;"/></p></div></div></div>
     <div id="viewer"></div>
 </body>
