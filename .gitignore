@@ -1,0 +1,3 @@
+#large files that need to be excluded for github#
+*.MacOsX.tar.bz2
+*_Windows.exe
